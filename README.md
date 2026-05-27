@@ -228,8 +228,13 @@ Per a resoldre‑ho, el codi de la skill ha estat modificat per convertir:
 - `,` → `"coma"`
 - `.` → `"punt"`
 
-Aquest canvi assegura que la temperatura i les mesures es pronuncien clarament, sense que el TTS intenti “dir” el símbol 
-directament.
+Aquest canvi assegura que la temperatura i les mesures es pronuncien clarament, modificant la pronunciació de les 
+unitats de mesura, (per exemple per 32.5ºC) passant de "325ºC" a 32 coma 5ºC".
+
+Arxiu modificat:
+```
+/home/ovos/.venvs/ovos/lib/python3.11/site-packages/ovos_skill_weather/__init__.py
+```
 
 ---
 
@@ -387,19 +392,9 @@ per mantenir‑lo estable i senzill.
 Només les skills bàsiques de meteorologia i alertes són efectives; la resta de resolucions es fa a través de la 
 **persona i el LLM**.
 
-## 11. Modificació de la skill "weather": parse de símbols.
-
-Arxiu modificat:
-```
-/home/ovos/.venvs/ovos/lib/python3.11/site-packages/ovos_skill_weather/__init__.py
-```
-
-La modificació realitzada optimitza el text per a la pronunciació correcta del TTS Piper, convertint els símbols de 
-puntuació bàsics a la paraula completa. Això evita que Piper pronunciï "325" en comptes de "32 coma 5".
-
 ---
 
-## 12. Annexos i enllaços
+## 11. Annexos i enllaços
 
 Tots els fitxers de configuració i recursos es documenten a continuació, quan el llicència ho permet.
 
