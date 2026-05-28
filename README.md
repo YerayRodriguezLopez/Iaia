@@ -1,6 +1,6 @@
 # Iaia
 
-# 1. Guia tècnica d'instal·lació i configuració d'OVOS Bookworm (català)
+# Guia tècnica d'instal·lació i configuració d'OVOS Bookworm (català)
 
 ## Índex
 1. Versió d’OVOS i imatge base
