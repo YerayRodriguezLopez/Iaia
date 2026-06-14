@@ -13,7 +13,8 @@
 8. Persona i LLM remot
 9. Llenguatge del sistema i pipeline d’intents
 10. PHAL i skills
-11. Annexos i enllaços
+11. Rutes del sistema
+12. Annexos i enllaços
 
 ---
 
@@ -394,7 +395,82 @@ Només les skills bàsiques de meteorologia i alertes són efectives; la resta d
 
 ---
 
-## 11. Annexos i enllaços
+## 11. Arxius principals i problemes trobats
+
+### Arxiu de configuració del sistema OVOS
+`/home/ovos/.config/mycroft/mycroft.conf`
+
+### PiperTTS no pronuncia la primera paraula
+Al arxiu de configuració del sistema, hem afegit un retard de mig segon a la secció `ovos-tts-plugin-piper`:
+
+`"piper_leading_silence": 0.5`
+
+### Script d'OVOS persona (modificació per stop word)
+`/home/ovos/.venvs/ovos/lib/python3.11/site-packages/ovos_persona/__init__.py`
+```python
+	def can_stop(self, message: Message) -> bool:
+	sess = SessionManager.get(message)
+	return self._active_sessions.get(sess.session_id) or False
+```
+
+### Script de la skill 'weather' i puntació amb PiperTTS
+`/home/ovos/.venvs/ovos/lib/python3.11/site-packages/ovos_skill_weather/__init__.py`
+
+Degut a que PiperTTS fa servir els simbols de puntuació per fer pauses, en comptes de dir "32.5ºC" pronunciava "325ºC", 
+per aquest motiu hem afegit un script que fa "parse" als texts, convertint els simbols en paraules:
+```python
+# --- TTS cleanup helpers --------------------------------------------
+    def _clean_for_tts(self, text: str) -> str:
+        """Normalize text before sending it to TTS.
+
+        - Remove '|' so Piper doesn't try to pronounce it.
+        - Fix decimals so 40.2 becomes '40 coma 2' (ca/es) or '40 point 2'.
+        """
+        if not isinstance(text, str):
+            return text
+
+        # Replace pipes with a small pause
+        t = text.replace("|", ", ")
+
+        # Decide decimal wording based on language
+        lang = getattr(self, "lang", None) or "ca-es"
+        if lang.startswith(("ca", "es")):
+            # "40.2" -> "40 coma 2"
+            t = re.sub(r"(\d+)\.(\d+)", r"\1 coma \2", t)
+        else:
+            # "40.2" -> "40 point 2"
+            t = re.sub(r"(\d+)\.(\d+)", r"\1 point \2", t)
+
+        return t
+
+    def speak(self, utterance, *args, **kwargs):
+        """Override speak to clean text before TTS."""
+        if isinstance(utterance, str):
+            utterance = self._clean_for_tts(utterance)
+        elif isinstance(utterance, list):
+            utterance = [self._clean_for_tts(u) for u in utterance]
+        return super().speak(utterance, *args, **kwargs)
+
+    def speak_dialog(self, dialog, data=None, *args, **kwargs):
+        """Override speak_dialog to clean any string values in dialog data."""
+        if data:
+            cleaned = {}
+            for k, v in data.items():
+                if isinstance(v, str):
+                    cleaned[k] = self._clean_for_tts(v)
+                else:
+                    cleaned[k] = v
+            data = cleaned
+        return super().speak_dialog(dialog, data, *args, **kwargs)
+```
+
+### Stop intents (frases de la stop word)
+La stop word ara és part del sistema, i resideix al `ovos-core`. El sistema tenia arxius .intent pre-configurats, 
+però el format que el seu script principal cerca son amb format d'extensió .voc a la següent ubicació:
+
+`/home/ovos/.venvs/ovos/lib/python3.11/site-packages/ovos_core/intent_services/locale/ca-es/*.voc`º
+
+## 12. Annexos i enllaços
 
 Tots els fitxers de configuració i recursos es documenten a continuació, quan el llicència ho permet.
 
