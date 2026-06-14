@@ -6,14 +6,14 @@
 1. Versió d’OVOS i imatge base
 2. Política de backup (abans de qualsevol instal·lació)
 3. Wake word i openWakeWord
-4. STT: fasterwhisper
+4. STT: fasterwhisper i català
 5. TTS: piper i veu catalana
 6. Dialeg i normalització de text
 7. Feedback sonor i limitacions
 8. Persona i LLM remot
 9. Llenguatge del sistema i pipeline d’intents
 10. PHAL i skills
-11. Rutes del sistema
+11. Arxius principals i problemes trobats
 12. Annexos i enllaços
 
 ---
@@ -25,7 +25,7 @@ Eina de gravació: **[Raspberry Pi Imager 1.8.4 estable](https://downloads.raspb
 
 ---
 
-## 2. Política de backup (obligatòria)
+## 2. Política de backup (abans de qualsevol instal·lació)
 
 Abans de qualsevol instal·lació o canvi de configuració cal crear una **còpia de seguretat completa** del sistema i 
 validar el procediment de restauració. Aquesta regla s’aplica a **totes les seccions** d’instal·lació (STT, TTS, wake word, persona, skills, etc.).
