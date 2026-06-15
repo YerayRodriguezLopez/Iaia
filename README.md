@@ -131,22 +131,6 @@ O bé com alternativa amb pip install:
 pip install ovos-stt-plugin-fasterwhisper
 ```
 
-### Configuració STT
-
-```json
-"stt": {
-  "module": "ovos-stt-plugin-fasterwhisper",
-  "fallback_module": "",
-  "ovos-stt-plugin-fasterwhisper": {
-    "model": "small",
-    "use_cuda": false,
-    "num_workers": 4,
-    "cpu_threads": 4,
-    "compute_type": "int8"
-  }
-}
-```
-
 Aquesta configuració és la base de referència per a STT en català. Qualsevol prova nova hauria d’aplicar‑se sobre un 
 backup previ creat abans d’instal·lar el plugin o canviar el model.
 
@@ -184,24 +168,6 @@ wget -O ~/.local/share/piper/voices/ca_ES-upc_ona-medium/config.json \
   https://huggingface.co/rhasspy/piper-voices/resolve/main/ca/ca_ES/upc_ona/medium/ca_ES-upc_ona-medium.onnx.json?download=true
 ```
 
-### Configuració TTS
-
-```json
-"tts": {
-  "module": "ovos-tts-plugin-piper",
-  "fallback_module": "",
-  "ovos-tts-plugin-piper": {
-    "voice": "ca_ES-upc_ona-medium",
-    "path": "~/.local/share/piper/voices/ca_ES-upc_ona-medium/",
-    "use_cuda": false,
-    "length_scale": 1.0,
-    "noise_scale": 0.667,
-    "noise_w": 0.8,
-    "piper_leading_silence": 0.5
-  }
-}
-```
-
 Aquesta és la configuració de referència per a la síntesi de veu en català.
 
 ---
@@ -210,14 +176,6 @@ Aquesta és la configuració de referència per a la síntesi de veu en català.
 
 El sistema utilitza el plugin **`ovos‑dialog‑normalizer‑plugin`** per a transformar el text abans que arribi a TTS. 
 Aquest plugin només cal habilitar‑lo; no requereix configuració addicional.
-
-### Configuració de normalització de diàleg
-
-```json
-"dialog_transformers": {
-  "ovos-dialog-normalizer-plugin": {}
-}
-```
 
 Aquesta línia habilita el plugin i permet substituir símbols per a unes paraules més naturals en la síntesi de veu.
 
@@ -244,17 +202,6 @@ Arxiu modificat:
 El sistema de so ha tingut problemes amb alguns plugins, que no poden gestionar correctament l’entrada i sortida de 
 sons simultànies. Actualment, **l’únic feedback de so que funciona de manera estable** és el de detecció de wake word, configurat als fitxers definits a `sounds`.
 
-### Configuració de sounds
-
-```json
-"sounds": {
-  "start_listening": "/home/ovos/snd/on-sfx.wav",
-  "end_listening": "/home/ovos/snd/off-sfx.wav",
-  "finish_listening": "/home/ovos/snd/off-sfx.wav",
-  "acknowledgement": "/home/ovos/snd/off-sfx.wav"
-}
-```
-
 Qualsevol intent de definir àudio addicional (per exemple, per a confirmacions de skills) hauria de ser provat 
 exhaustivament per evitar interferències amb el micròfon i la síntesi de veu.
 
@@ -272,20 +219,6 @@ Aquesta integració requereix configuració explícita i un **system prompt** qu
 - El sistema aplica un **system prompt** (no visible per l’usuari final) a cada petició, per mantenir el context 
 empresarial i de seguretat.
 
-### Exemple de configuració de persona
-
-```json
-"persona": {
-  "handle_fallback": true,
-  "default_persona": "iaia",
-  "ovos-persona-http-client": {
-    "endpoint": "<URL_O_HOST_REMOT>",
-    "model": "qwen-30b-moe",
-    "fallback": true
-  }
-}
-```
-
 El valor de `endpoint` és privat i ha de coincidir amb el servei exposat per l’equip de LLM.
 
 ### Ubicació de la configuració de Persona
@@ -301,43 +234,6 @@ El valor de `endpoint` és privat i ha de coincidir amb el servei exposat per l�
 El sistema està configurat per treballar en català (`ca-es`) a tot el pipeline d’intents, sense referència explícita a 
 cap “versió de configuració” particular; el comportament es deriva directament del fitxer de configuració compartit.
 
-### Configuració de intents i pipeline
-
-```json
-"intents": {
-  "ovos-m2v-pipeline": {
-    "model": "Jarbas/ovos-model2vec-intents-LaBSE",
-    "conf_high": 0.7,
-    "conf_medium": 0.5,
-    "conf_low": 0.15,
-    "ignore_intents": []
-  },
-  "persona": {
-    "handle_fallback": true,
-    "default_persona": "iaia"
-  },
-  "pipeline": [
-    "ocp_high",
-    "stop_high",
-    "converse",
-    "padatious_high",
-    "ovos-m2v-pipeline-high",
-    "adapt_high",
-    "stop_medium",
-    "adapt_medium",
-    "common_qa",
-    "fallback_medium",
-    "ovos-persona-pipeline-plugin-low",
-    "fallback_low"
-  ],
-  "padatious": {
-    "stem": false,
-    "cast_to_ascii": true,
-    "domain_engine": false
-  }
-}
-```
-
 Aquest pipeline gestiona intents, comunica amb el LLM i retorna la resposta via TTS en català. Cada canvi d’aquesta zona 
 cal fer‑se sobre un backup prèvi del sistema.
 
@@ -347,48 +243,6 @@ cal fer‑se sobre un backup prèvi del sistema.
 
 El sistema deshabilita alguns components de maquinari no necessaris i aplica una política de **blacklist de skills** 
 per mantenir‑lo estable i senzill.
-
-### Configuració PHAL i skills
-
-```json
-"PHAL": {
-  "ovos-PHAL-plugin-camera": {
-    "enabled": false
-  }
-},
-"skills": {
-  "blacklisted_skills": [
-    "ovos-skill-parrot.openvoiceos",
-    "ovos-skill-speedtest.openvoiceos",
-    "skill-ovos-somafm.openvoiceos",
-    "ovos-skill-hello-world.openvoiceos",
-    "ovos-skill-days-in-history.openvoiceos",
-    "ovos-skill-ip.openvoiceos",
-    "ovos-skill-date-time.openvoiceos",
-    "skill-ovos-spelling.openvoiceos",
-    "ovos-skill-moviemaster.openvoiceos",
-    "ovos-skill-laugh.openvoiceos",
-    "ovos-skill-wolfie.openvoiceos",
-    "ovos-skill-wordnet.openvoiceos",
-    "ovos-skill-confucius-quotes.openvoiceos",
-    "ovos-skill-ddg.openvoiceos",
-    "ovos-skill-local-media.openvoiceos",
-    "skill-ovos-randomness.openvoiceos",
-    "ovos-skill-youtube-music.openvoiceos",
-    "ovos-skill-dictation.openvoiceos",
-    "ovos-skill-naptime.openvoiceos",
-    "ovos-skill-wikihow.openvoiceos",
-    "ovos-skill-pyradios.openvoiceos",
-    "ovos-skill-news.openvoiceos",
-    "ovos-skill-camera.openvoiceos",
-    "ovos-skill-word-of-the-day.openvoiceos",
-    "ovos-skill-icanhazdadjokes.openvoiceos",
-    "ovos-skill-iss-location.openvoiceos",
-    "ovos-skill-personal.openvoiceos",
-    "ovos-skill-number-facts.openvoiceos"
-  ]
-}
-```
 
 Només les skills bàsiques de meteorologia i alertes són efectives; la resta de resolucions es fa a través de la 
 **persona i el LLM**.
@@ -401,74 +255,22 @@ Només les skills bàsiques de meteorologia i alertes són efectives; la resta d
 `/home/ovos/.config/mycroft/mycroft.conf`
 
 ### PiperTTS no pronuncia la primera paraula
-Al arxiu de configuració del sistema, hem afegit un retard de mig segon a la secció `ovos-tts-plugin-piper`:
-
-`"piper_leading_silence": 0.5`
+Al arxiu de configuració del sistema, hem afegit un retard de mig segon a la secció `ovos-tts-plugin-piper`.
 
 ### Script d'OVOS persona (modificació per stop word)
 `/home/ovos/.venvs/ovos/lib/python3.11/site-packages/ovos_persona/__init__.py`
-```python
-	def can_stop(self, message: Message) -> bool:
-	sess = SessionManager.get(message)
-	return self._active_sessions.get(sess.session_id) or False
-```
 
 ### Script de la skill 'weather' i puntació amb PiperTTS
 `/home/ovos/.venvs/ovos/lib/python3.11/site-packages/ovos_skill_weather/__init__.py`
 
 Degut a que PiperTTS fa servir els simbols de puntuació per fer pauses, en comptes de dir "32.5ºC" pronunciava "325ºC", 
 per aquest motiu hem afegit un script que fa "parse" als texts, convertint els simbols en paraules:
-```python
-# --- TTS cleanup helpers --------------------------------------------
-    def _clean_for_tts(self, text: str) -> str:
-        """Normalize text before sending it to TTS.
-
-        - Remove '|' so Piper doesn't try to pronounce it.
-        - Fix decimals so 40.2 becomes '40 coma 2' (ca/es) or '40 point 2'.
-        """
-        if not isinstance(text, str):
-            return text
-
-        # Replace pipes with a small pause
-        t = text.replace("|", ", ")
-
-        # Decide decimal wording based on language
-        lang = getattr(self, "lang", None) or "ca-es"
-        if lang.startswith(("ca", "es")):
-            # "40.2" -> "40 coma 2"
-            t = re.sub(r"(\d+)\.(\d+)", r"\1 coma \2", t)
-        else:
-            # "40.2" -> "40 point 2"
-            t = re.sub(r"(\d+)\.(\d+)", r"\1 point \2", t)
-
-        return t
-
-    def speak(self, utterance, *args, **kwargs):
-        """Override speak to clean text before TTS."""
-        if isinstance(utterance, str):
-            utterance = self._clean_for_tts(utterance)
-        elif isinstance(utterance, list):
-            utterance = [self._clean_for_tts(u) for u in utterance]
-        return super().speak(utterance, *args, **kwargs)
-
-    def speak_dialog(self, dialog, data=None, *args, **kwargs):
-        """Override speak_dialog to clean any string values in dialog data."""
-        if data:
-            cleaned = {}
-            for k, v in data.items():
-                if isinstance(v, str):
-                    cleaned[k] = self._clean_for_tts(v)
-                else:
-                    cleaned[k] = v
-            data = cleaned
-        return super().speak_dialog(dialog, data, *args, **kwargs)
-```
 
 ### Stop intents (frases de la stop word)
 La stop word ara és part del sistema, i resideix al `ovos-core`. El sistema tenia arxius .intent pre-configurats, 
 però el format que el seu script principal cerca son amb format d'extensió .voc a la següent ubicació:
 
-`/home/ovos/.venvs/ovos/lib/python3.11/site-packages/ovos_core/intent_services/locale/ca-es/*.voc`º
+`/home/ovos/.venvs/ovos/lib/python3.11/site-packages/ovos_core/intent_services/locale/ca-es/*.voc`
 
 ## 12. Annexos i enllaços
 
