@@ -74,35 +74,6 @@ El model generat s’ha de copiar al camí que tens definit, per exemple:
 
 Aquesta és la ruta que s’ha d’indicar a la configuració de `hotwords`.
 
-### Configuració de listener i hotwords
-
-```json
-"listener": {
-  "wake_word": "yaya",
-  "confirm_listening": true,
-  "confirm_utterance": true,
-  "record_utt_pre": 0.5,
-  "record_utt_post": 0.8,
-  "timeout": 5,
-  "sec_per_buff": 0.1,
-  "bits": 16,
-  "multiplier": 1.0,
-  "max_queued_utterances": 1
-},
-"hotwords": {
-  "yaya": {
-    "module": "ovos-ww-plugin-openwakeword",
-    "models": [
-      "/home/ovos/.local/share/mycroft/openwakeword/models/yaya.tflite"
-    ],
-    "inference_framework": "tflite",
-    "threshold": 0.55,
-    "listen": true,
-    "active": true
-  }
-}
-```
-
 ### Descart de Vosk per a wake word
 
 - `Vosk` es va utilitzar inicialment com a **STT**, i per la detecció de wake word.
