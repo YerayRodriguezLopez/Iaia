@@ -1,5 +1,17 @@
 # Iaia
 
+## Exemples d'ús
+
+### Temps
+- `Iaia, quin temps fa a Barcelona?`
+- `Iaia, dona'm el pronòstic del temps de la setmana a Barcelona`
+
+### Recordatoris
+- `Iaia, avisa'm d'aquí a dos minuts`
+
+### Consultes a la Iaia (LLM)
+- `Iaia, com preparo un plat de macarrons?`
+
 # Guia tècnica d'instal·lació i configuració d'OVOS Bookworm (català)
 
 ## Índex
@@ -35,7 +47,7 @@ validar el procediment de restauració. Aquesta regla s’aplica a **totes les s
 - Backup de la **imatge sencera** del sistema.
 - Backup dels **fitxers de configuració d’OVOS** (`mycroft.conf` o equivalent).
 - Backup dels **plugins i models** instal·lats localment.
-- Backup dels **directorios de veus TTS** i registre d’arrencada.
+- Backup dels **directoris de veus TTS** i registre d’arrencada.
 - Recuperar‑se a aquest punt de referència cada cop que un canvi de `pip` o plugin trenqui el flux.
 
 ---
@@ -206,7 +218,7 @@ El sistema està configurat per treballar en català (`ca-es`) a tot el pipeline
 cap “versió de configuració” particular; el comportament es deriva directament del fitxer de configuració compartit.
 
 Aquest pipeline gestiona intents, comunica amb el LLM i retorna la resposta via TTS en català. Cada canvi d’aquesta zona 
-cal fer‑se sobre un backup prèvi del sistema.
+cal fer‑se sobre un backup previ del sistema.
 
 ---
 
@@ -238,7 +250,7 @@ Degut a que PiperTTS fa servir els simbols de puntuació per fer pauses, en comp
 per aquest motiu hem afegit un script que fa "parse" als texts, convertint els simbols en paraules:
 
 ### Stop intents (frases de la stop word)
-La stop word ara és part del sistema, i resideix al `ovos-core`. El sistema tenia arxius .intent pre-configurats, 
+La stop word ara és part del sistema, i resideix al `ovos-core`. El sistema tenia arxius .intent preconfigurats, 
 però el format que el seu script principal cerca son amb format d'extensió .voc a la següent ubicació:
 
 `/home/ovos/.venvs/ovos/lib/python3.11/site-packages/ovos_core/intent_services/locale/ca-es/*.voc`
